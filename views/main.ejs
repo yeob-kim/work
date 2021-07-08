@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+        <title>모두의 블로그</title>
+
+        <style>
+            .title {
+                width: 500px;
+                margin: auto;
+                margin-top: 50px;
+                display: block;
+                text-align: center;
+            }
+            .write-btn {
+                float : right;
+            }
+            .mainwrap {
+                width: 1300px;
+                margin: auto;
+                padding-left: 20px;
+                padding-right: 20px;
+                padding-bottom: 30px;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                get_users()
+            })
+            function get_users(category) {
+                $("#list").empty()
+                console.log(category)
+                $.ajax({
+                    type: "GET",
+                    url: `/api/main${category ? "?category=" + category : ""}`,
+                    data: {},
+                    success: function (response) {
+                        let posts = response["posts"]
+                        for (let i = 0; i < posts.length; i++) {
+                            make_card(posts[i])
+    
+                        }
+                    }
+                })
+            }
+    
+            function make_card(item) {
+                let htmlTemp = `        <button type="button" onclick = "moveDetail()">    
+                                            <div class="card border-dark mb-3" id="list" style="max-width: 18rem;">    
+                                                <div class="card-header">${item["title"]}</div>
+                                                    <div class="card-body text-dark">
+                                                    <h5 class="card-title">${item["title"]}</h5>
+                                                    <p class="card-text">${item["comment"]}</p>
+                                                </div>
+                                            </div>
+                                        </button>`
+                $("#list").append(htmlTemp)
+            }
+        </script>
+        <script type="text/javaScript">
+            function moveDetail(){
+                location.href = "/detail";
+            }
+            function moveWrite(){
+                location.href = "/write";
+            }
+        </script>
+    </head>
+    <body>
+        <div class = "mainwrap">
+            <h1 class = "title">모두의 블로그</h1>
+            <p><button type="button" class = "write-btn" onclick = "moveWrite()">글쓰기</button></p>
+            <div class="card border-dark mb-3" id="list" style="max-width: 18rem;">
+                <div class="card-header">Header</div>
+                <div class="card-body text-dark">
+                  <h5 class="card-title">Dark card title</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

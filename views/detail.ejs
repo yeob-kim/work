@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+        <script>
+            function updatePosting(){
+                $.ajax({
+                    type: "POST",
+                    url: `/api/detail`,
+                    data: { title : $('#pstitle').val(), comment : $('#pscomment').val() },
+                    success: function (response) {
+                        let reposts = response["reposting"]
+                        for (let i = 0; i < reposts.length; i++) {
+                            update_card(posts[i])
+                        }
+                    }
+                })
+            }
+            function update_card(item) {
+                let htmlTemp = `        <div class = "writeForm">
+                                            <div class="form-group">
+                                            <label for="exampleInputEmail1">제목</label>
+                                            <input type="email" class="form-control" id="pstitle" aria-describedby="emailHelp" placeholder="">
+                                            ${item["title"]}</div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1">공유하고 싶은 생각</label>
+                                                <textarea class="form-control" id="pscomment" rows="3">${item["comment"]}</textarea>
+                                            </div>
+                                            <button type="submit" onclick="updatePosting()" class="btn btn-primary my-btn">수정하기</button>
+                                        </div>`
+                $("#updatePage").append(htmlTemp)
+            }
+        </script>
+
+        <title>모두의 블로그 / 수정하기</title>
+
+        <style>
+            .title {
+                width: 500px;
+                margin: auto;
+                margin-top: 50px;
+                display: block;
+                text-align: center;
+            }
+            .writeForm {
+                width: 700px;
+                margin: auto;
+                margin-top: 20px;
+            }
+            .my-btn{
+                display: block;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class = "title">모두의 블로그</h1>
+        <div class = "writeForm" id = "updatePage">
+            <div class="form-group">
+              <label for="exampleInputEmail1">제목</label>
+              <input type="email" class="form-control" id="pstitle" aria-describedby="emailHelp" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">공유하고 싶은 생각</label>
+                <textarea class="form-control" id="pscomment" rows="3"></textarea>
+            </div>
+            <button type="submit" onclick="updatePosting()" class="btn btn-primary my-btn">수정하기</button>
+        </div>
+    </body>
+</html>
